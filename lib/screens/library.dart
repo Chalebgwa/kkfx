@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 class BookList extends StatelessWidget {
+  const BookList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Library"
         ),
       ),
@@ -16,9 +17,9 @@ class BookList extends StatelessWidget {
           itemBuilder: (BuildContext context,int i){
             return ListTile(
               title: Text("book $i"),
-              subtitle: Text("Text"),
+              subtitle: const Text("Text"),
               isThreeLine: true,
-              trailing: Icon(Icons.check_box),
+              trailing: const Icon(Icons.check_box),
             );
           }),
     );
@@ -29,9 +30,9 @@ class BookList extends StatelessWidget {
 
 class BookView extends StatelessWidget {
 
-  final Book book;
+  final Book? book;
 
-  const BookView({this.book});
+  const BookView({Key? key, this.book}) : super(key: key);
 
 
 
@@ -39,17 +40,17 @@ class BookView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(this.book.name),
+        title: Text(book?.name ?? ''),
       ),
-      body: Text(this.book.content),
+      body: Text(book?.content ?? ''),
     );
   }
 }
 
 class Book {
 
-  final String name;
-  final String content;
+  final String? name;
+  final String? content;
 
   const Book({this.name,this.content});
 

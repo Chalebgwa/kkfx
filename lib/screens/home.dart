@@ -13,9 +13,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class Home extends StatefulWidget {
 
-  final VoidCallback onSignOut;
+  final VoidCallback? onSignOut;
 
-  const Home({Key key,this.onSignOut}) : super(key: key);
+  const Home({Key? key, this.onSignOut}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -24,24 +24,28 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> with TickerProviderStateMixin {
-  FirebaseUser user;
-  String currentUserId;
-  SharedPreferences prefs;
+  User? user;
+  String? currentUserId;
+  SharedPreferences? prefs;
 
   void setValues() async {
     prefs = await SharedPreferences.getInstance();
-    currentUserId = prefs.getString("id");
+    currentUserId = prefs?.getString("id");
   }
 
   @override
   void initState() {
+    super.initState();
     setValues();
   }
 
   void _signOut() async {
     try {
-      AuthProvider.of(context).auth.signOut();
-      widget.onSignOut();
+      final authProvider = AuthProvider.of(context);
+      if (authProvider != null) {
+        authProvider.auth.signOut();
+        widget.onSignOut?.call();
+      }
     } catch (e) {
       print(e);
     }
@@ -52,10 +56,10 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     return Scaffold(
         backgroundColor: Colors.grey,
         appBar: AppBar(
-          title: Text("Home"),
+          title: const Text("Home"),
           actions: <Widget>[
             IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.exit_to_app,
                   color: Colors.white,
                 ),
@@ -66,33 +70,33 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
             child: GridView.count(
               crossAxisCount: 2,
               shrinkWrap: true,
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               children: <Widget>[
-                Tile(
+                const Tile(
                   icon: Icons.email,
                   text: "inbox",
                   page: ChatList(),
                 ),
-                Tile(
+                const Tile(
                   icon: Icons.store,
                   text: "store",
                   page: Store(),
                 ),
-                Tile(
+                const Tile(
                   icon: Icons.school,
                   text: "course",
                   page: Course(),
                 ),
-                Tile(
+                const Tile(
                     icon: Icons.picture_as_pdf,
                     text: "library",
                     page: BookList()),
-                Tile(
+                const Tile(
                   icon: Icons.account_balance,
                   text: "payments",
                   page: Payments(),
                 ),
-                Tile(
+                const Tile(
                     icon: Icons.people_outline,
                     text: "discussions",
                     page: Discussions())
@@ -105,10 +109,10 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
 }
 
 class Tile extends StatelessWidget {
-  final IconData icon;
-  final String text;
-  final Widget page;
-  const Tile({this.icon, this.text, this.page});
+  final IconData? icon;
+  final String? text;
+  final Widget? page;
+  const Tile({Key? key, this.icon, this.text, this.page}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -122,8 +126,10 @@ class Tile extends StatelessWidget {
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
       child: InkWell(
         onTap: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => this.page));
+          if (page != null) {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => page!));
+          }
         },
         borderRadius: BorderRadius.circular(radius),
         splashColor: Colors.yellow,
@@ -135,13 +141,13 @@ class Tile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Icon(
-                  this.icon,
+                  icon,
                   size: 40.0,
                   color: Colors.amber,
                 ),
                 Text(
-                  this.text,
-                  style: TextStyle(),
+                  text ?? '',
+                  style: const TextStyle(),
                 )
               ],
             ),

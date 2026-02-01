@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 class Screen extends StatelessWidget{
+  const Screen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: Row(
           children: <Widget>[
@@ -19,6 +21,7 @@ class Screen extends StatelessWidget{
 }
 
 class Candle extends StatelessWidget {
+  const Candle({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

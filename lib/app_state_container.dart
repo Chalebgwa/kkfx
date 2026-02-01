@@ -6,50 +6,49 @@ import 'package:flutter/material.dart';
 
 class AppStateContainer extends StatefulWidget {
   // Your apps state is managed by the container
-  final AppState state;
+  final AppState? state;
   // This widget is simply the root of the tree,
   // so it has to have a child!
   final Widget child;
 
-  AppStateContainer({
-    @required this.child,
+  const AppStateContainer({
+    Key? key,
+    required this.child,
     this.state,
-  });
+  }) : super(key: key);
 
   // This creates a method on the AppState that's just like 'of'
   // On MediaQueries, Theme, etc
   // This is the secret to accessing your AppState all over your app
-  static _AppStateContainerState of(BuildContext context) {
-    return (context.inheritFromWidgetOfExactType(_InheritedStateContainer)
-    as _InheritedStateContainer)
-        .data;
+  static _AppStateContainerState? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<_InheritedStateContainer>()?.data;
   }
 
   @override
-  _AppStateContainerState createState() => new _AppStateContainerState();
+  _AppStateContainerState createState() => _AppStateContainerState();
 }
 
 class _AppStateContainerState extends State<AppStateContainer> {
   // Just padding the state through so we don't have to
   // manipulate it with widget.state.
-  AppState state;
+  late AppState state;
 
   @override
   void initState() {
 
     super.initState();
     if (widget.state != null) {
-      state = widget.state;
+      state = widget.state!;
     } else {
-      state = new AppState.loading();
+      state = AppState.loading();
       // fake some config loading
       startCountdown();
     }
   }
 
-  Future<Null> startCountdown() async {
-    const timeOut = const Duration(seconds: 1000);
-    new Timer(timeOut, () {
+  Future<void> startCountdown() async {
+    const timeOut = Duration(seconds: 1000);
+    Timer(timeOut, () {
       setState(() => state.isLoading = false);
     });
   }
@@ -58,7 +57,7 @@ class _AppStateContainerState extends State<AppStateContainer> {
   // AppStateContainer --> InheritedStateContainer --> The rest of your app.
   @override
   Widget build(BuildContext context) {
-    return new _InheritedStateContainer(
+    return _InheritedStateContainer(
       data: this,
       child: widget.child,
     );
@@ -74,10 +73,10 @@ class _InheritedStateContainer extends InheritedWidget {
   // So there has to be a child,
   // Although Flutter just knows to build the Widget thats passed to it
   // So you don't have have a build method or anything.
-  _InheritedStateContainer({
-    Key key,
-    @required this.data,
-    @required Widget child,
+  const _InheritedStateContainer({
+    Key? key,
+    required this.data,
+    required Widget child,
   }) : super(key: key, child: child);
 
   // This is a better way to do this, which you'll see later.

@@ -12,34 +12,30 @@ enum AuthStatus {
 }
 
 class RootPage extends StatefulWidget {
+  final AppState? state;
 
-  final AppState state;
-
-  const RootPage({Key key, this.state}) : super(key: key);
+  const RootPage({Key? key, this.state}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => new _RootPageState();
+  State<StatefulWidget> createState() => _RootPageState();
 }
 
 class _RootPageState extends State<RootPage> {
-
   AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
   void didChangeDependencies() {
-
+    super.didChangeDependencies();
     AuthProvider.of(context).auth.currentUser().then((user) {
       setState(() {
         authStatus =
-        user == null ? AuthStatus.NOT_SIGNED_IN : AuthStatus.SIGNED_IN;
+            user == null ? AuthStatus.NOT_SIGNED_IN : AuthStatus.SIGNED_IN;
       });
     });
   }
@@ -56,8 +52,7 @@ class _RootPageState extends State<RootPage> {
     });
   }
 
-
-  Widget _buildWaitingScreen() { 
+  Widget _buildWaitingScreen() {
     return Scaffold(
       body: Container(
         alignment: Alignment.center,
@@ -73,17 +68,15 @@ class _RootPageState extends State<RootPage> {
         return _buildWaitingScreen();
 
       case AuthStatus.NOT_SIGNED_IN:
-
-        return new LoginPage(
+        return LoginPage(
           title: "Login",
           onSignIn: _signedIn,
         );
 
       case AuthStatus.SIGNED_IN:
-        return new Home(
+        return Home(
           onSignOut: _signedOut,
         );
-
     }
   }
 }

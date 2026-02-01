@@ -7,19 +7,19 @@ import 'package:tmfx/auth.dart';
 
 class AuthProvider extends StatefulWidget {
 
-  final BaseAuth auth;
-  final Widget child;
-  final AppState state;
+  final BaseAuth? auth;
+  final Widget? child;
+  final AppState? state;
 
-  const AuthProvider({Key key, this.auth, this.child, this.state}) : super(key: key);
+  const AuthProvider({Key? key, this.auth, this.child, this.state}) : super(key: key);
 
   @override
   AuthProviderState createState() {
-    return new AuthProviderState();
+    return AuthProviderState();
   }
 
-  static _InheritedContainer of(BuildContext context){
-    return (context.inheritFromWidgetOfExactType(_InheritedContainer) as _InheritedContainer);
+  static _InheritedContainer? of(BuildContext context){
+    return context.dependOnInheritedWidgetOfExactType<_InheritedContainer>();
   }
 
 
@@ -27,23 +27,23 @@ class AuthProvider extends StatefulWidget {
 
 class AuthProviderState extends State<AuthProvider> {
 
-  AppState state;
+  late AppState state;
 
   @override
   void initState() {
     super.initState();
     if(widget.state != null){
-      state = widget.state;
+      state = widget.state!;
     } else {
-      state = new AppState.loading();
+      state = AppState.loading();
       startCountdown();
     }
   }
 
 
-  Future<Null> startCountdown() async {
-    const timeOut = const Duration(seconds: 1000);
-    new Timer(timeOut, () {
+  Future<void> startCountdown() async {
+    const timeOut = Duration(seconds: 1000);
+    Timer(timeOut, () {
       setState(() => state.isLoading = false);
     });
   }
@@ -52,19 +52,18 @@ class AuthProviderState extends State<AuthProvider> {
   @override
   Widget build(BuildContext context) {
     return _InheritedContainer(
-      child: widget.child,
-      auth: widget.auth,
+      child: widget.child!,
+      auth: widget.auth!,
     );
   }
 }
 
 class _InheritedContainer extends InheritedWidget {
 
-  final Widget child;
   final BaseAuth auth;
 
 
-  _InheritedContainer({Key key,this.child,this.auth}) : super(key:key,child:child);
+  const _InheritedContainer({Key? key, required Widget child, required this.auth}) : super(key: key, child: child);
 
 
   @override

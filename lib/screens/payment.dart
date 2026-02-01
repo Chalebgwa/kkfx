@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 
 class Payments extends StatelessWidget {
+  const Payments({Key? key}) : super(key: key);
 
 
 
@@ -11,9 +12,9 @@ class Payments extends StatelessWidget {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        title: Text("Payments"),
+        title: const Text("Payments"),
       ),
-      body: Center(
+      body: const Center(
         child: Text("NOT IMPLEMENTED"),
       ),
     );

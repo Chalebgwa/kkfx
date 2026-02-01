@@ -4,70 +4,86 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tmfx/screens/home.dart';
 
-final GoogleSignIn _signIn = new GoogleSignIn();
+final GoogleSignIn _signIn = GoogleSignIn();
 
 abstract class BaseAuth {
-  Future<FirebaseUser> currentUser();
-  Future<FirebaseUser> signIn(BuildContext context);
+  Future<User?> currentUser();
+  Future<User?> signIn(BuildContext context);
   Future<void> signOut();
 }
 
 class Auth implements BaseAuth {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  SharedPreferences prefs;
-  final Firestore firestore = Firestore.instance;
+  SharedPreferences? prefs;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Future<FirebaseUser> signIn(BuildContext context) async {
-    GoogleSignInAccount googleSignInAccount = await _signIn.signIn();
-    GoogleSignInAuthentication gsa = await googleSignInAccount.authentication;
-    prefs = await SharedPreferences.getInstance();
-
-    FirebaseUser user = await _auth.signInWithGoogle(
-        idToken: gsa.idToken, accessToken: gsa.accessToken);
-
-    print("user:" + user.toString());
-
-    if (user != null) {
-      final QuerySnapshot result = await Firestore.instance
-          .collection('users')
-          .where('id', isEqualTo: user.uid)
-          .getDocuments();
-
-      final List<DocumentSnapshot> documents = result.documents;
-
-      if (documents.length == 0) {
-        Firestore.instance.collection('users').document(user.uid).setData({
-          "nickname": user.displayName,
-          "photoUrl": user.photoUrl,
-          "id": user.uid
-        });
-
-        await prefs.setString('id', user.uid);
-        await prefs.setString('nickname', user.displayName);
-        await prefs.setString('photoUrl', user.photoUrl);
-      } else {
-        await prefs.setString('id', documents[0]['id']);
-        await prefs.setString('nickname', documents[0]['nickname']);
-        await prefs.setString('photoUrl', documents[0]['photoUrl']);
-        await prefs.setString('aboutMe', documents[0]['aboutMe']);
+  Future<User?> signIn(BuildContext context) async {
+    try {
+      GoogleSignInAccount? googleSignInAccount = await _signIn.signIn();
+      if (googleSignInAccount == null) {
+        return null;
       }
-      return user;
-    } else {
+      
+      GoogleSignInAuthentication gsa = await googleSignInAccount.authentication;
+      prefs = await SharedPreferences.getInstance();
+
+      final credential = GoogleAuthProvider.credential(
+        idToken: gsa.idToken,
+        accessToken: gsa.accessToken,
+      );
+
+      UserCredential userCredential = await _auth.signInWithCredential(credential);
+      User? user = userCredential.user;
+
+      print("user: ${user.toString()}");
+
+      if (user != null) {
+        final QuerySnapshot result = await FirebaseFirestore.instance
+            .collection('users')
+            .where('id', isEqualTo: user.uid)
+            .get();
+
+        final List<QueryDocumentSnapshot> documents = result.docs;
+
+        if (documents.isEmpty) {
+          await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+            "nickname": user.displayName ?? '',
+            "photoUrl": user.photoURL ?? '',
+            "id": user.uid
+          });
+
+          await prefs?.setString('id', user.uid);
+          await prefs?.setString('nickname', user.displayName ?? '');
+          await prefs?.setString('photoUrl', user.photoURL ?? '');
+        } else {
+          await prefs?.setString('id', documents[0]['id']);
+          await prefs?.setString('nickname', documents[0]['nickname']);
+          await prefs?.setString('photoUrl', documents[0]['photoUrl']);
+          final aboutMe = documents[0].data() as Map<String, dynamic>;
+          if (aboutMe.containsKey('aboutMe')) {
+            await prefs?.setString('aboutMe', documents[0]['aboutMe']);
+          }
+        }
+        return user;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print("Error during sign in: $e");
       return null;
     }
   }
 
-  Future<FirebaseUser> currentUser() async {
-    FirebaseUser user = await _auth.currentUser();
-    return user != null ? user : null;
+  Future<User?> currentUser() async {
+    User? user = _auth.currentUser;
+    return user;
   }
 
   Future<void> signOut() async {
-    _signIn.signOut();
+    await _signIn.signOut();
     return _auth.signOut();
   }
 }
