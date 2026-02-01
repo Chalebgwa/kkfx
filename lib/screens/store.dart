@@ -7,7 +7,7 @@ class Product{
   final double price;
   final String image;
 
-  const Product({@required this.name,@required this.price,@required this.image});
+  const Product({required this.name, required this.price, required this.image});
 
 
 }
@@ -16,7 +16,7 @@ List<Product> products = List.generate(
     10,
         (int i)
     {
-      return new Product(
+      return Product(
           name: "item $i",
           price: 100.0,
           image: "assets/$i-0.png"
@@ -31,7 +31,7 @@ class Item extends StatefulWidget {
   final Product product;
 
 
-  const Item({this.product});
+  const Item({Key? key, required this.product}) : super(key: key);
 
   @override
   State createState() {
@@ -46,7 +46,7 @@ class ItemState extends State<Item> {
   final Product product;
 
 
-  ItemState({this.product});
+  ItemState({required this.product});
 
 
   Widget _buildFullScreenPage(){
@@ -82,18 +82,17 @@ class ItemState extends State<Item> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Image.asset(
-                    this.product.image),
+                child: Image.asset(product.image),
               ),
               ButtonBar(
                 alignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  IconButton(icon: Icon(Icons.add_shopping_cart), onPressed: (){
-                    Store.cart.add(this.product);
+                  IconButton(icon: const Icon(Icons.add_shopping_cart), onPressed: (){
+                    Store.cart.add(product);
                   }),
                   Text(
                     product.price.toString(),
-                    style: TextStyle(
+                    style: const TextStyle(
                      color: Colors.amber
                     ),
                   )
@@ -111,7 +110,9 @@ class ItemState extends State<Item> {
 //class list
 class Store extends StatelessWidget {
 
-  static List<Product> cart = new List<Product>();
+  static List<Product> cart = <Product>[];
+
+  const Store({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -124,25 +125,25 @@ class Store extends StatelessWidget {
 
 
         },
-        child: Icon(Icons.shopping_basket),
+        child: const Icon(Icons.shopping_basket),
       ),
       appBar: AppBar(
-        title: Text("Store"),
+        title: const Text("Store"),
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: IconButton(
 
                 disabledColor: Colors.red,
-                icon: Icon(
+                icon: const Icon(
                   Icons.shopping_cart
                 ),
                 color: Colors.white,
                 onPressed: (){
                   showModalBottomSheet<void>(context: context, builder: (BuildContext context) {
-                    if(cart.length==0){
+                    if(cart.isEmpty){
 
-                      return Center(
+                      return const Center(
                         child: Text("Empty Cart"),
                       );
 
@@ -157,8 +158,8 @@ class Store extends StatelessWidget {
                                   return Card(
                                     child: ListTile(
                                       title: Text(cart[i].name),
-                                      leading: Icon(Icons.local_florist),
-                                      trailing: Icon(Icons.remove_circle_outline),
+                                      leading: const Icon(Icons.local_florist),
+                                      trailing: const Icon(Icons.remove_circle_outline),
                                     ),
                                   );
                                 }

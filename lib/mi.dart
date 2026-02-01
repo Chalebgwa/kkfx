@@ -14,7 +14,7 @@ import 'package:tmfx/const.dart';
 
 
 List<Chat> messages = List.generate(100, (int i){
-  return new Chat(user:i.toString(),messages: List.generate(10, (int k)=> Message(id: i,timestamp: DateTime.now().millisecondsSinceEpoch.toString(),idFrom: "Other",content: "assets/pp.jpg",type: 2)));
+  return Chat(user:i.toString(),messages: List.generate(10, (int k)=> Message(id: i,timestamp: DateTime.now().millisecondsSinceEpoch.toString(),idFrom: "Other",content: "assets/pp.jpg",type: 2)));
 });
 
 class Message {
@@ -47,11 +47,11 @@ class Chat {
 
 class ChatList extends StatefulWidget {
 
-  ChatList({Key key}) : super(key: key);
+  ChatList({Key? key}) : super(key: key);
 
   @override
   ChatListState createState() {
-    return new ChatListState();
+    return ChatListState();
   }
 }
 
@@ -109,7 +109,7 @@ class ChatListState extends State<ChatList> {
           return AlertDialog(
             title: Text("Delete"),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 child: Text("Ok"),
                 onPressed: (){
 
@@ -119,7 +119,7 @@ class ChatListState extends State<ChatList> {
                   });
                 },
               ),
-              FlatButton(
+              TextButton(
                 child: Text("Cancel"),
               )
             ],
@@ -201,11 +201,11 @@ class ChatView extends StatefulWidget {
   final Chat chat;
 
 
-  const ChatView({Key key, this.chat}) : super(key: key);
+  const ChatView({Key? key, this.chat}) : super(key: key);
 
   @override
   ChatViewState createState() {
-    return new ChatViewState();
+    return ChatViewState();
   }
 }
 
@@ -223,9 +223,9 @@ class ChatViewState extends State<ChatView> {
 
 
 
-  final TextEditingController textEditingController = new TextEditingController();
-  final ScrollController listScrollController = new ScrollController();
-  final FocusNode focusNode = new FocusNode();
+  final TextEditingController textEditingController = TextEditingController();
+  final ScrollController listScrollController = ScrollController();
+  final FocusNode focusNode = FocusNode();
   String peerId;
   String peerAvatar = "assets/pp.jpg";
 
@@ -261,10 +261,10 @@ class ChatViewState extends State<ChatView> {
         children: <Widget>[
           // Button send image
           Material(
-            child: new Container(
-              margin: new EdgeInsets.symmetric(horizontal: 1.0),
-              child: new IconButton(
-                icon: new Icon(Icons.image),
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 1.0),
+              child: IconButton(
+                icon: Icon(Icons.image),
                 onPressed: getImage,
                 color: primaryColor,
               ),
@@ -272,10 +272,10 @@ class ChatViewState extends State<ChatView> {
             color: Colors.white,
           ),
           Material(
-            child: new Container(
-              margin: new EdgeInsets.symmetric(horizontal: 1.0),
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 1.0),
               child: new IconButton(
-                icon: new Icon(Icons.face),
+                icon: Icon(Icons.face),
                 onPressed: getSticker,
                 color: primaryColor,
               ),
@@ -302,10 +302,10 @@ class ChatViewState extends State<ChatView> {
 
           // Button send message
           Material(
-            child: new Container(
-              margin: new EdgeInsets.symmetric(horizontal: 8.0),
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 8.0),
               child: new IconButton(
-                icon: new Icon(Icons.send),
+                icon: Icon(Icons.send),
                 onPressed: () => onSendMessage(textEditingController.text, 0),
                 color: primaryColor,
               ),
@@ -316,8 +316,8 @@ class ChatViewState extends State<ChatView> {
       ),
       width: double.infinity,
       height: 50.0,
-      decoration: new BoxDecoration(
-          border: new Border(top: new BorderSide(color: greyColor2, width: 0.5)), color: Colors.white),
+      decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: greyColor2, width: 0.5)), color: Colors.white),
     );
   }
 
@@ -397,27 +397,27 @@ class ChatViewState extends State<ChatView> {
         children: <Widget>[
           Row(
             children: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () => onSendMessage('mimi1', 2),
-                child: new Image.asset(
+                child: Image.asset(
                   'images/mimi1.gif',
                   width: 50.0,
                   height: 50.0,
                   fit: BoxFit.cover,
                 ),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () => onSendMessage('mimi2', 2),
-                child: new Image.asset(
+                child: Image.asset(
                   'images/mimi2.gif',
                   width: 50.0,
                   height: 50.0,
                   fit: BoxFit.cover,
                 ),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () => onSendMessage('mimi3', 2),
-                child: new Image.asset(
+                child: Image.asset(
                   'images/mimi3.gif',
                   width: 50.0,
                   height: 50.0,
@@ -429,27 +429,27 @@ class ChatViewState extends State<ChatView> {
           ),
           Row(
             children: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () => onSendMessage('mimi4', 2),
-                child: new Image.asset(
+                child: Image.asset(
                   'images/mimi4.gif',
                   width: 50.0,
                   height: 50.0,
                   fit: BoxFit.cover,
                 ),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () => onSendMessage('mimi5', 2),
-                child: new Image.asset(
+                child: Image.asset(
                   'images/mimi5.gif',
                   width: 50.0,
                   height: 50.0,
                   fit: BoxFit.cover,
                 ),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () => onSendMessage('mimi6', 2),
-                child: new Image.asset(
+                child: Image.asset(
                   'images/mimi6.gif',
                   width: 50.0,
                   height: 50.0,
@@ -461,27 +461,27 @@ class ChatViewState extends State<ChatView> {
           ),
           Row(
             children: <Widget>[
-              FlatButton(
+              TextButton(
                 onPressed: () => onSendMessage('mimi7', 2),
-                child: new Image.asset(
+                child: Image.asset(
                   'images/mimi7.gif',
                   width: 50.0,
                   height: 50.0,
                   fit: BoxFit.cover,
                 ),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () => onSendMessage('mimi8', 2),
-                child: new Image.asset(
+                child: Image.asset(
                   'images/mimi8.gif',
                   width: 50.0,
                   height: 50.0,
                   fit: BoxFit.cover,
                 ),
               ),
-              FlatButton(
+              TextButton(
                 onPressed: () => onSendMessage('mimi9', 2),
-                child: new Image.asset(
+                child: Image.asset(
                   'images/mimi9.gif',
                   width: 50.0,
                   height: 50.0,
@@ -494,15 +494,15 @@ class ChatViewState extends State<ChatView> {
         ],
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       ),
-      decoration: new BoxDecoration(
-          border: new Border(top: new BorderSide(color: greyColor2, width: 0.5)), color: Colors.white),
+      decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: greyColor2, width: 0.5)), color: Colors.white),
       padding: EdgeInsets.all(5.0),
       height: 180.0,
     );
   }
 
   Future getImage() async {
-    imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+    imageFile = await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (imageFile != null) {
       setState(() {
@@ -587,13 +587,13 @@ class ChatViewState extends State<ChatView> {
     if (content.trim() != '') {
       textEditingController.clear();
 
-      var documentReference = Firestore.instance
+      var documentReference = FirebaseFirestore.instance
           .collection('messages')
-          .document(groupChatId)
+          .doc(groupChatId)
           .collection(groupChatId)
-          .document(DateTime.now().millisecondsSinceEpoch.toString());
+          .doc(DateTime.now().millisecondsSinceEpoch.toString());
 
-      Firestore.instance.runTransaction((transaction) async {
+      FirebaseFirestore.instance.runTransaction((transaction) async {
         await transaction.set(
           documentReference,
           {
@@ -622,16 +622,17 @@ class ChatViewState extends State<ChatView> {
 
   Future uploadFile() async {
     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-    StorageReference reference = FirebaseStorage.instance.ref().child(fileName);
-    StorageUploadTask uploadTask = reference.putFile(imageFile);
-    StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
-    storageTaskSnapshot.ref.getDownloadURL().then((downloadUrl) {
+    Reference reference = FirebaseStorage.instance.ref().child(fileName);
+    UploadTask uploadTask = reference.putFile(imageFile);
+    try {
+      TaskSnapshot storageTaskSnapshot = await uploadTask;
+      final downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
       imageUrl = downloadUrl;
       setState(() {
         isLoading = false;
         onSendMessage(imageUrl, 1);
       });
-    }, onError: (err) {
+    } catch (err) {
       setState(() {
         isLoading = false;
       });

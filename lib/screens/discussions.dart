@@ -7,19 +7,21 @@ enum DismissDialogAction {
 }
 
 class Discussions extends StatelessWidget {
+  const Discussions({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Discussions"),
+        title: const Text("Discussions"),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: null,
-        child: Icon(Icons.edit),
+        child: const Icon(Icons.edit),
       ),
       body: ListView.builder(
         itemBuilder: (BuildContext context, int i) {
-          return _ListItem(
+          return const _ListItem(
             username: "Pako Chalebgwa",
             content: Text("This is test text, it is no way meant"),
           );
@@ -32,26 +34,26 @@ class Discussions extends StatelessWidget {
 }
 
 class _ListItem extends StatefulWidget {
-  final String username;
-  final Widget content;
-  final int id;
-  final List<String> comments;
+  final String? username;
+  final Widget? content;
+  final int? id;
+  final List<String>? comments;
 
   const _ListItem(
-      {Key key, this.username, this.content, this.id, this.comments})
+      {Key? key, this.username, this.content, this.id, this.comments})
       : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return new _ListItemState(username, content, id, comments);
+    return _ListItemState(username, content, id, comments);
   }
 }
 
 class _ListItemState extends State<_ListItem> {
-  final String username;
-  final Widget content;
-  final int id;
-  final List<String> comments;
+  final String? username;
+  final Widget? content;
+  final int? id;
+  final List<String>? comments;
 
   int num_likes = 0;
   int num_comments = 0;
@@ -72,7 +74,7 @@ class _ListItemState extends State<_ListItem> {
 
   void open_comments(BuildContext context){
     Navigator.push(context, MaterialPageRoute<DismissDialogAction>(
-        builder: (BuildContext context) => Comments()
+        builder: (BuildContext context) => const Comments()
     )
     );
   }
@@ -87,31 +89,31 @@ class _ListItemState extends State<_ListItem> {
 
             Row(
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
                   child: CircleAvatar(
                     backgroundImage: AssetImage("assets/pp.jpg"),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(this.username),
+                  child: Text(username ?? ''),
                 )
               ],
             ),
-            this.content,
+            content ?? Container(),
 
             ButtonBar(
               mainAxisSize: MainAxisSize.min,
               alignment: MainAxisAlignment.center,
               children: <Widget>[
-                IconButton(icon: Icon(Icons.thumb_up), onPressed: increment_likes),
-                Text(this.num_likes == 0 ? " ": this.num_likes.toString()),
-                IconButton(icon: Icon(Icons.comment), onPressed: (){
+                IconButton(icon: const Icon(Icons.thumb_up), onPressed: increment_likes),
+                Text(num_likes == 0 ? " ": num_likes.toString()),
+                IconButton(icon: const Icon(Icons.comment), onPressed: (){
                   open_comments(context);
                 }),
-                Text(this.num_comments == 0 ? " ": this.num_comments.toString()),
-                IconButton(icon: Icon(Icons.share), onPressed: increment_comments),
+                Text(num_comments == 0 ? " ": num_comments.toString()),
+                IconButton(icon: const Icon(Icons.share), onPressed: increment_comments),
               ],
             )
 
@@ -124,49 +126,44 @@ class _ListItemState extends State<_ListItem> {
 
 class Comment extends StatelessWidget {
 
-  final String username;
-  final Widget content;
-  final String time;
-  final AnimationController animationController;
-  const Comment({this.username,this.content,this.time,this.animationController});
+  final String? username;
+  final Widget? content;
+  final String? time;
+  final AnimationController? animationController;
+  const Comment({Key? key, this.username,this.content,this.time,this.animationController}) : super(key: key);
 
 
   @override
   Widget build(BuildContext context) {
-    return new SizeTransition(
-      //new
-        sizeFactor: new CurvedAnimation(
-          //new
-            parent: animationController,
-            curve: Curves.easeIn), //new
-        axisAlignment: 0.0, //new
-        child: new Container(
-          //modified
+    return SizeTransition(
+      sizeFactor: CurvedAnimation(
+          parent: animationController ?? AnimationController(vsync: NavigatorState(), duration: Duration.zero),
+          curve: Curves.easeIn),
+        axisAlignment: 0.0,
+        child: Container(
           margin: const EdgeInsets.symmetric(vertical: 10.0),
-          child: new Row(
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              new Container(
+              Container(
                 margin: const EdgeInsets.only(right: 16.0),
-                child: new CircleAvatar(child: new Text(this.username[0])),
+                child: CircleAvatar(child: Text((username?.isNotEmpty == true) ? username![0] : '?')),
               ),
-              new Expanded(
-                //new
-                child: new Column(
-                  //modified
+              Expanded(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    new Text(this.username, style: Theme.of(context).textTheme.subhead),
-                    new Container(
+                    Text(username ?? '', style: Theme.of(context).textTheme.titleMedium),
+                    Container(
                       margin: const EdgeInsets.only(top: 5.0),
-                      child: this.content
+                      child: content ?? Container()
                     ),
                   ],
                 ),
               ),
             ],
           ),
-        ) //new
+        )
     );
 
   }
@@ -175,110 +172,99 @@ class Comment extends StatelessWidget {
 
 
 class Comments extends StatefulWidget {
-  //modified
-  @override //new
-  State createState() => new CommentState(); //new
+  const Comments({Key? key}) : super(key: key);
+
+  @override
+  State createState() => CommentState();
 }
 
 
 class CommentState extends State<Comments> with TickerProviderStateMixin {
   final List<Comment> _comments = <Comment>[];
-  final TextEditingController _textController = new TextEditingController();
+  final TextEditingController _textController = TextEditingController();
   bool _isComposing = false;
 
-  @override //new
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(title: new Text("Comments")),
-      body: new Column(
-        //m odified
-        children: <Widget>[
-          //new
-          new Flexible(
-            //new
-            child: new ListView.builder(
-              //new
-              padding: new EdgeInsets.all(8.0), //new
-              reverse: true, //new
-              itemBuilder: (_, int index) => _comments[index], //new
-              itemCount: _comments.length, //new
-            ), //new
-          ), //new
-          new Divider(height: 1.0), //new
-          new Container(
-            //new
-            decoration:
-            new BoxDecoration(color: Theme.of(context).cardColor), //new
-            child: _buildTextComposer(), //modified
-          ), //new
-        ], //new
-      ), //new
-    );
-  }
-
   @override
-  void dispose() {
-    //new
-    for (Comment comment in _comments) //new
-      comment.animationController.dispose(); //new
-    super.dispose(); //new
-  }
-
-  Widget _buildTextComposer() {
-    return new Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: new Row(
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Comments")),
+      body: Column(
         children: <Widget>[
-          new Flexible(
-            child: new TextField(
-              controller: _textController,
-              onChanged: (String text) {
-                setState(() {
-                  //new
-                  _isComposing = text.length > 0; //new
-                });
-              },
-              onSubmitted: _handleSubmitted,
-              decoration:
-              new InputDecoration.collapsed(hintText: "Comment"),
+          Flexible(
+            child: ListView.builder(
+              padding: const EdgeInsets.all(8.0),
+              reverse: true,
+              itemBuilder: (_, int index) => _comments[index],
+              itemCount: _comments.length,
             ),
           ),
-          new Container(
-            //new
-            margin: new EdgeInsets.symmetric(horizontal: 4.0), //new
-            child: new IconButton(
-              //new
-              icon: new Icon(Icons.send), //new
-              onPressed: _isComposing
-                  ? () => _handleSubmitted(_textController.text)
-                  : null, //new
-            ),
-          ) //new
+          const Divider(height: 1.0),
+          Container(
+            decoration:
+            BoxDecoration(color: Theme.of(context).cardColor),
+            child: _buildTextComposer(),
+          ),
         ],
       ),
     );
   }
 
-  //new
+  @override
+  void dispose() {
+    for (Comment comment in _comments)
+      comment.animationController?.dispose();
+    super.dispose();
+  }
+
+  Widget _buildTextComposer() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Row(
+        children: <Widget>[
+          Flexible(
+            child: TextField(
+              controller: _textController,
+              onChanged: (String text) {
+                setState(() {
+                  _isComposing = text.length > 0;
+                });
+              },
+              onSubmitted: _handleSubmitted,
+              decoration:
+              const InputDecoration.collapsed(hintText: "Comment"),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 4.0),
+            child: IconButton(
+              icon: const Icon(Icons.send),
+              onPressed: _isComposing
+                  ? () => _handleSubmitted(_textController.text)
+                  : null,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   void _handleSubmitted(String text) {
     _textController.clear();
     setState(() {
-      //new
-      _isComposing = false; //new
+      _isComposing = false;
     });
 
-    Comment comment = new Comment(
+    Comment comment = Comment(
       username: "Pako Chalebgwa",
       content: Text(text),
-      animationController: new AnimationController(
-        //new
-        duration: new Duration(milliseconds: 700), //new
-        vsync: this, //new
-      ), //new
-    ); //new
+      animationController: AnimationController(
+        duration: const Duration(milliseconds: 700),
+        vsync: this,
+      ),
+    );
     setState(() {
       _comments.insert(0, comment);
     });
-    comment.animationController.forward(); //new
+    comment.animationController?.forward();
   }
 }

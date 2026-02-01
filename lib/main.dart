@@ -1,26 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:tmfx/auth_provider.dart';
 import 'root.dart';
 import 'auth.dart';
 import 'app_state_container.dart';
 
-void main() => runApp(new MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return AuthProvider(
-      auth:new Auth(),
-      child: new MaterialApp(
+      auth: Auth(),
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'KKFX',
-
-        theme: new ThemeData(
+        theme: ThemeData(
           primaryColor: Colors.black,
-          accentColor: Colors.amber
+          colorScheme: ColorScheme.fromSwatch().copyWith(
+            secondary: Colors.amber,
+          ),
         ),
-        home: new RootPage(),
+        home: RootPage(),
       ),
     );
   }
