@@ -137,7 +137,7 @@ class Comment extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizeTransition(
       sizeFactor: CurvedAnimation(
-          parent: animationController!,
+          parent: animationController ?? AnimationController(vsync: NavigatorState(), duration: Duration.zero),
           curve: Curves.easeIn),
         axisAlignment: 0.0,
         child: Container(
@@ -147,7 +147,7 @@ class Comment extends StatelessWidget {
             children: <Widget>[
               Container(
                 margin: const EdgeInsets.only(right: 16.0),
-                child: CircleAvatar(child: Text((username ?? '')[0])),
+                child: CircleAvatar(child: Text((username?.isNotEmpty == true) ? username![0] : '?')),
               ),
               Expanded(
                 child: Column(

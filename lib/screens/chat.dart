@@ -229,8 +229,8 @@ class ChatListState extends State<ChatList> {
     return Future.value(false);
   }
 
-  Widget _buildSuggestions(BuildContext context) {
-    showDialog(
+  Future<void> _buildSuggestions(BuildContext context) async {
+    await showDialog(
         context: context,
         builder: (context) {
           return StreamBuilder(
@@ -253,7 +253,6 @@ class ChatListState extends State<ChatList> {
             },
           );
         });
-    return Container();
   }
 }
 

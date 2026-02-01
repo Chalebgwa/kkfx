@@ -124,11 +124,12 @@ class _VideoPlayerLoadingState extends State<VideoPlayerLoading> {
     if (_initialized) {
       return VideoPlayer(widget.controller);
     }
-    return const Stack(
-      children: <Widget>[
-        Center(child: CircularProgressIndicator()),
-      ],
+    return Stack(
       fit: StackFit.expand,
+      children: <Widget>[
+        VideoPlayer(widget.controller),
+        const Center(child: CircularProgressIndicator()),
+      ],
     );
   }
 }

@@ -7,11 +7,11 @@ import 'package:tmfx/auth.dart';
 
 class AuthProvider extends StatefulWidget {
 
-  final BaseAuth? auth;
-  final Widget? child;
+  final BaseAuth auth;
+  final Widget child;
   final AppState? state;
 
-  const AuthProvider({Key? key, this.auth, this.child, this.state}) : super(key: key);
+  const AuthProvider({Key? key, required this.auth, required this.child, this.state}) : super(key: key);
 
   @override
   AuthProviderState createState() {
@@ -52,8 +52,8 @@ class AuthProviderState extends State<AuthProvider> {
   @override
   Widget build(BuildContext context) {
     return _InheritedContainer(
-      child: widget.child!,
-      auth: widget.auth!,
+      child: widget.child,
+      auth: widget.auth,
     );
   }
 }

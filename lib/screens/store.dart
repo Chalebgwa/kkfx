@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 //item class
 class Product{
 
-  final String? name;
-  final double? price;
-  final String? image;
+  final String name;
+  final double price;
+  final String image;
 
   const Product({required this.name, required this.price, required this.image});
 
@@ -28,10 +28,10 @@ List<Product> products = List.generate(
 //list item
 class Item extends StatefulWidget {
 
-  final Product? product;
+  final Product product;
 
 
-  const Item({Key? key, this.product}) : super(key: key);
+  const Item({Key? key, required this.product}) : super(key: key);
 
   @override
   State createState() {
@@ -43,10 +43,10 @@ class Item extends StatefulWidget {
 
 class ItemState extends State<Item> {
 
-  final Product? product;
+  final Product product;
 
 
-  ItemState({this.product});
+  ItemState({required this.product});
 
 
   Widget _buildFullScreenPage(){
@@ -54,7 +54,7 @@ class ItemState extends State<Item> {
       appBar: AppBar(
         toolbarOpacity: 1.0,
       ),
-      body: Container(child: Image.asset(product?.image ?? '')),
+      body: Container(child: Image.asset(product.image)),
     );
   }
 
@@ -82,17 +82,16 @@ class ItemState extends State<Item> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Image.asset(
-                    product?.image ?? ''),
+                child: Image.asset(product.image),
               ),
               ButtonBar(
                 alignment: MainAxisAlignment.end,
                 children: <Widget>[
                   IconButton(icon: const Icon(Icons.add_shopping_cart), onPressed: (){
-                    Store.cart.add(product!);
+                    Store.cart.add(product);
                   }),
                   Text(
-                    product?.price.toString() ?? '',
+                    product.price.toString(),
                     style: const TextStyle(
                      color: Colors.amber
                     ),

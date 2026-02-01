@@ -32,12 +32,15 @@ class _RootPageState extends State<RootPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    AuthProvider.of(context).auth.currentUser().then((user) {
-      setState(() {
-        authStatus =
-            user == null ? AuthStatus.NOT_SIGNED_IN : AuthStatus.SIGNED_IN;
+    final authProvider = AuthProvider.of(context);
+    if (authProvider != null) {
+      authProvider.auth.currentUser().then((user) {
+        setState(() {
+          authStatus =
+              user == null ? AuthStatus.NOT_SIGNED_IN : AuthStatus.SIGNED_IN;
+        });
       });
-    });
+    }
   }
 
   void _signedIn() {
@@ -53,9 +56,8 @@ class _RootPageState extends State<RootPage> {
   }
 
   Widget _buildWaitingScreen() {
-    return Scaffold(
-      body: Container(
-        alignment: Alignment.center,
+    return const Scaffold(
+      body: Center(
         child: CircularProgressIndicator(),
       ),
     );
