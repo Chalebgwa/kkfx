@@ -59,12 +59,12 @@ class Auth implements BaseAuth {
           await prefs?.setString('nickname', user.displayName ?? '');
           await prefs?.setString('photoUrl', user.photoURL ?? '');
         } else {
-          await prefs?.setString('id', documents[0]['id']);
-          await prefs?.setString('nickname', documents[0]['nickname']);
-          await prefs?.setString('photoUrl', documents[0]['photoUrl']);
-          final aboutMe = documents[0].data() as Map<String, dynamic>;
-          if (aboutMe.containsKey('aboutMe')) {
-            await prefs?.setString('aboutMe', documents[0]['aboutMe']);
+          final docData = documents[0].data() as Map<String, dynamic>;
+          await prefs?.setString('id', docData['id']);
+          await prefs?.setString('nickname', docData['nickname']);
+          await prefs?.setString('photoUrl', docData['photoUrl']);
+          if (docData.containsKey('aboutMe')) {
+            await prefs?.setString('aboutMe', docData['aboutMe']);
           }
         }
         return user;

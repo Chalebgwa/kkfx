@@ -64,7 +64,7 @@ class VideoCard extends StatelessWidget {
         pageBuilder: fullScreenRoutePageBuilder,
       );
 
-      route.popped.then((void value) {
+      route.completed.then((void value) {
         controller?.setVolume(0.0);
       });
 

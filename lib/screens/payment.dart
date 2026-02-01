@@ -104,7 +104,7 @@ class _PaymentsState extends State<Payments> {
     final timestamp = payment['timestamp'] as Timestamp?;
     final status = payment['status'] ?? 'pending';
     
-    final date = timestamp != null
+    final String date = timestamp != null
         ? DateFormat('MMM dd, yyyy HH:mm').format(timestamp.toDate())
         : 'Unknown date';
 

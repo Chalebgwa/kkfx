@@ -262,8 +262,8 @@ class ChatViewState extends State<ChatView> {
           // Button send image
           Material(
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 1.0),
-              child: new IconButton(
+              margin: const EdgeInsets.symmetric(horizontal: 1.0),
+              child: IconButton(
                 icon: Icon(Icons.image),
                 onPressed: getImage,
                 color: primaryColor,
@@ -624,14 +624,15 @@ class ChatViewState extends State<ChatView> {
     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
     Reference reference = FirebaseStorage.instance.ref().child(fileName);
     UploadTask uploadTask = reference.putFile(imageFile);
-    TaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
-    storageTaskSnapshot.ref.getDownloadURL().then((downloadUrl) {
+    try {
+      TaskSnapshot storageTaskSnapshot = await uploadTask;
+      final downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
       imageUrl = downloadUrl;
       setState(() {
         isLoading = false;
         onSendMessage(imageUrl, 1);
       });
-    }, onError: (err) {
+    } catch (err) {
       setState(() {
         isLoading = false;
       });

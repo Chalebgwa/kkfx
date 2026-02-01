@@ -157,7 +157,7 @@ class Store extends StatelessWidget {
                                 itemBuilder: (BuildContext c,int i){
                                   return Card(
                                     child: ListTile(
-                                      title: Text(cart[i].name ?? ''),
+                                      title: Text(cart[i].name),
                                       leading: const Icon(Icons.local_florist),
                                       trailing: const Icon(Icons.remove_circle_outline),
                                     ),

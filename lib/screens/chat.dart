@@ -837,7 +837,7 @@ class ChatScreenState extends State<ChatScreen> {
           .doc(DateTime.now().millisecondsSinceEpoch.toString());
 
       FirebaseFirestore.instance.runTransaction((transaction) async {
-        transaction.set(
+        await transaction.set(
           documentReference,
           {
             'idFrom': id,
